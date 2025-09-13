@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cyphers Bank</title>
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--accent:#00c2a8;--muted:#9aa7b2;--glass: rgba(255,255,255,0.03)}
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial;color:#e6eef3;background:linear-gradient(180deg,#071020 0%, #071828 60%);}    
+    .app{max-width:1080px;margin:28px auto;padding:20px}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:54px;height:54px;background:linear-gradient(135deg,var(--accent),#1589ff);border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:700;color:#052022}
+    .bank-name{font-size:22px;font-weight:700}
+
+    .layout{display:grid;grid-template-columns:280px 1fr;gap:20px;margin-top:18px}
+    .panel{background:var(--card);border-radius:12px;padding:16px;box-shadow:0 6px 18px rgba(2,6,23,0.6);}
+
+    /* Sidebar */
+    .sidebar .profile{display:flex;gap:12px;align-items:center}
+    .avatar{width:48px;height:48px;border-radius:10px;background:var(--glass);display:flex;align-items:center;justify-content:center;font-weight:700}
+    .menu{margin-top:18px;display:flex;flex-direction:column;gap:6px}
+    .menu button{background:transparent;border:0;color:var(--muted);padding:10px;border-radius:8px;text-align:left;cursor:pointer}
+    .menu button.active{background:linear-gradient(90deg, rgba(0,194,168,0.08), rgba(21,137,255,0.04));color:#e6eef3}
+
+    /* Dashboard */
+    .header-row{display:flex;justify-content:space-between;align-items:center;gap:12px}
+    .card-balance{padding:18px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));}
+    .balance-amount{font-size:28px;font-weight:700}
+    .muted{color:var(--muted);font-size:13px}
+
+    /* Send money form */
+    form{display:grid;gap:12px}
+    .row{display:flex;gap:10px}
+    input,select,button{padding:10px;border-radius:10px;border:0;background:rgba(255,255,255,0.03);color:#d9f3ef}
+    input::placeholder{color:var(--muted)}
+    .btn{cursor:pointer}
+    .btn.primary{background:var(--accent);color:#052022;border:0}
+    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04)}
+
+    /* Modal */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(2,6,23,0.6);display:none;align-items:center;justify-content:center}
+    .modal{background:var(--card);padding:18px;border-radius:12px;min-width:320px}
+    .pin-input{display:flex;gap:8px;justify-content:center}
+    .pin-input input{text-align:center;font-size:20px;width:48px}
+
+    .tx-list{display:flex;flex-direction:column;gap:10px}
+    .tx{padding:10px;border-radius:8px;background:rgba(255,255,255,0.02);display:flex;justify-content:space-between}
+
+    footer{margin-top:18px;color:var(--muted);font-size:13px}
+
+    .hidden{display:none !important}
+
+    @media (max-width:900px){.layout{grid-template-columns:1fr;}.sidebar{order:2}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="brand">
+      <div class="logo">C</div>
+      <div>
+        <div class="bank-name">Cyphers Bank</div>
+      </div>
+    </div>
+
+    <div class="layout">
+      <aside class="panel sidebar">
+        <div class="profile">
+          <div class="avatar">P</div>
+          <div>
+            <div id="userName">Phuti Gift</div>
+            <div class="muted" id="userAcc">Acct • 1234 5678</div>
+          </div>
+        </div>
+
+        <div class="menu">
+          <button class="active" data-view="dashboard">Dashboard</button>
+          <button data-view="send">Send Money</button>
+          <button data-view="history">Transactions</button>
+          <button data-view="settings">Settings</button>
+        </div>
+      </aside>
+
+      <main class="panel">
+        <div id="viewContainer">
+          <!-- Dashboard -->
+          <section data-view-name="dashboard">
+            <div class="header-row">
+              <div>
+                <div class="muted">Available balance</div>
+                <div class="card-balance">
+                  <div class="balance-amount" id="balance">R 12,500.00</div>
+                  <div class="muted">Updated just now</div>
+                </div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end">
+                <button class="btn primary" id="quickSend">Send Money</button>
+                <button class="btn ghost" id="topUp">Top Up</button>
+              </div>
+            </div>
+
+            <div style="margin-top:18px">
+              <h3>Recent transactions</h3>
+              <div id="txList" class="tx-list"></div>
+            </div>
+          </section>
+
+          <!-- Send Money -->
+          <section class="hidden" data-view-name="send">
+            <h3>Send Money</h3>
+            <form id="sendForm">
+              <div>
+                <label class="muted">Recipient Name</label>
+                <input id="recipient" required placeholder="e.g. Nomusa M" />
+              </div>
+              <div>
+                <label class="muted">Account Number</label>
+                <input id="accNumber" required placeholder="1234 5678 9012" />
+              </div>
+              <div class="row">
+                <div style="flex:1">
+                  <label class="muted">Amount (ZAR)</label>
+                  <input id="amount" type="number" min="1" step="0.01" required placeholder="500" />
+                </div>
+                <div style="width:180px">
+                  <label class="muted">Type</label>
+                  <select id="type"><option>Instant</option><option>Standard</option></select>
+                </div>
+              </div>
+
+              <div style="display:flex;gap:8px">
+                <button class="btn primary" type="submit">Continue</button>
+                <button class="btn" type="button" id="resetForm">Reset</button>
+              </div>
+            </form>
+          </section>
+
+          <!-- History -->
+          <section class="hidden" data-view-name="history">
+            <h3>Transaction History</h3>
+            <div id="historyList" class="tx-list"></div>
+          </section>
+
+          <!-- Settings -->
+          <section class="hidden" data-view-name="settings">
+            <h3>Settings & Security</h3>
+            <div style="display:grid;gap:12px;max-width:420px">
+              <div>
+                <label class="muted">Change 4-digit PIN</label>
+                <div style="display:flex;gap:8px;margin-top:8px">
+                  <input id="newPin" placeholder="New PIN" maxlength="4" />
+                  <input id="confirmPin" placeholder="Confirm PIN" maxlength="4" />
+                  <button class="btn primary" id="changePinBtn">Save</button>
+                </div>
+                <div class="muted" style="margin-top:6px">Your PIN is required for sending money.</div>
+              </div>
+
+              <div>
+                <label class="muted">Reset demo data</label>
+                <div style="margin-top:8px">
+                  <button class="btn ghost" id="resetDemo">Reset Demo (localStorage)</button>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <footer>
+          Cyphers Bank 
+        </footer>
+      </main>
+    </div>
+  </div>
+
+  <!-- PIN Modal -->
+  <div class="modal-backdrop" id="pinModal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="pinTitle">
+      <h3 id="pinTitle">Confirm transaction</h3>
+      <div class="muted">Enter your 4-digit PIN to complete this payment</div>
+      <div style="height:12px"></div>
+      <div class="pin-input">
+        <input maxlength="1" pattern="[0-9]" inputmode="numeric" class="pinCell" />
+        <input maxlength="1" pattern="[0-9]" inputmode="numeric" class="pinCell" />
+        <input maxlength="1" pattern="[0-9]" inputmode="numeric" class="pinCell" />
+        <input maxlength="1" pattern="[0-9]" inputmode="numeric" class="pinCell" />
+      </div>
+      <div style="height:12px"></div>
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <button class="btn" id="cancelPin">Cancel</button>
+        <button class="btn primary" id="confirmPin">Confirm</button>
+      </div>
+      <div id="pinError" class="muted" style="margin-top:8px;color:#ff7b7b;display:none"></div>
+    </div>
+  </div>
+
+  <script>
+    // ===== Demo "backend" (pure JS & localStorage) =====
+    const STORAGE_KEY = 'cyphers_demo_v1';
+    const defaultState = {
+      user: {name:'Phuti Gift', account:'1234 5678', balance:2500.00, pin:'1234'},
+      transactions: []
+    };
+
+    function loadState(){
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if(!raw) return JSON.parse(JSON.stringify(defaultState));
+        const parsed = JSON.parse(raw) || JSON.parse(JSON.stringify(defaultState));
+        parsed.user = parsed.user || JSON.parse(JSON.stringify(defaultState.user));
+        parsed.transactions = Array.isArray(parsed.transactions) ? parsed.transactions : [];
+        return parsed;
+      }catch(e){
+        console.error('Failed to load state, using default', e);
+        return JSON.parse(JSON.stringify(defaultState));
+      }
+    }
+
+    function saveState(s){localStorage.setItem(STORAGE_KEY, JSON.stringify(s));}
+    let state = loadState();
+
+    // ===== UI helpers =====
+    const views = Array.from(document.querySelectorAll('[data-view-name]'));
+    function showView(name){
+      views.forEach(v=> v.classList.toggle('hidden', v.getAttribute('data-view-name')!==name));
+      document.querySelectorAll('.menu button').forEach(b=> b.classList.toggle('active', b.dataset.view===name));
+    }
+
+    function render(){
+      document.getElementById('userName').textContent = state.user.name;
+      document.getElementById('userAcc').textContent = 'Acct • ' + state.user.account;
+      document.getElementById('balance').textContent = formatMoney(state.user.balance);
+      renderTxList();
+      renderHistory();
+    }
+
+    function formatMoney(n){
+      return 'R ' + Number(n).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+    }
+
+    function renderTxList(){
+      const el = document.getElementById('txList');
+      el.innerHTML = '';
+      const recent = state.transactions.slice().reverse().slice(0,5);
+      if(recent.length===0){el.innerHTML='<div class="muted">No recent transactions</div>';return}
+      recent.forEach(tx=>{
+        const d = document.createElement('div');d.className='tx';
+        d.innerHTML = `<div><strong>${escapeHtml(tx.to)}</strong><div class="muted">${escapeHtml(tx.type)} • ${new Date(tx.date).toLocaleString()}</div></div><div><strong>${tx.amount < 0 ? '-' : ''}${formatMoney(Math.abs(tx.amount))}</strong></div>`;
+        el.appendChild(d);
+      })
+    }
+
+    function renderHistory(){
+      const el = document.getElementById('historyList');
+      el.innerHTML = '';
+      if(state.transactions.length===0){el.innerHTML='<div class="muted">No transactions</div>';return}
+      state.transactions.slice().reverse().forEach(tx=>{
+        const d = document.createElement('div');d.className='tx';
+        d.innerHTML = `<div><strong>${escapeHtml(tx.to)}</strong><div class="muted">${escapeHtml(tx.type)} • ${new Date(tx.date).toLocaleString()}</div></div><div><strong>${tx.amount < 0 ? '-' : ''}${formatMoney(Math.abs(tx.amount))}</strong></div>`;
+        el.appendChild(d);
+      })
+    }
+
+    function escapeHtml(str){
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    // ===== Send flow & PIN modal =====
+    let pendingTx = null;
+    const pinModal = document.getElementById('pinModal');
+    const pinCells = Array.from(document.querySelectorAll('.pinCell'));
+    const pinError = document.getElementById('pinError');
+    const confirmBtn = document.getElementById('confirmPin');
+    const cancelBtn = document.getElementById('cancelPin');
+
+    confirmBtn.disabled = true;
+
+    function openPinModal(tx){
+      if(!tx || typeof tx.amount !== 'number'){
+        console.error('openPinModal called with invalid transaction', tx);
+        pinError.textContent = 'Invalid transaction. Please try again.';
+        pinError.style.display = 'block';
+        return;
+      }
+
+      pendingTx = tx;
+      pinCells.forEach(i=>{i.value='';i.disabled=false});
+      pinError.style.display='none';
+      confirmBtn.disabled = true;
+      pinModal.style.display='flex';
+      setTimeout(()=> pinCells[0].focus(), 80);
+    }
+
+    function closePinModal(){
+      pinModal.style.display='none';
+      pinCells.forEach(i=>{i.value='';i.disabled=true});
+      confirmBtn.disabled = true;
+      pendingTx = null;
+      pinError.style.display = 'none';
+    }
+
+    function getPinFromModal(){
+      return pinCells.map(i=>i.value||'').join('');
+    }
+
+    function updateConfirmState(){
+      const entered = getPinFromModal();
+      confirmBtn.disabled = entered.length < 4;
+      if(entered.length === 4) pinError.style.display = 'none';
+    }
+
+    const sendForm = document.getElementById('sendForm');
+    sendForm.addEventListener('submit', e=>{
+      e.preventDefault();
+      const to = document.getElementById('recipient').value.trim();
+      const acc = document.getElementById('accNumber').value.trim();
+      const amount = parseFloat(document.getElementById('amount').value);
+      const type = document.getElementById('type').value;
+      if(!to || !acc || !amount || amount<=0){alert('Please fill valid details');return}
+      if(amount > state.user.balance){alert('Insufficient balance');return}
+
+      const tx = {to: to + ' • ' + acc, amount: -Math.abs(amount), type};
+      openPinModal(tx);
+    });
+
+    document.getElementById('quickSend').addEventListener('click', ()=>{
+      const btn = document.querySelector('.menu button[data-view="send"]');
+      if(btn) btn.click();
+    });
+
+    pinCells.forEach((cell,i)=>{
+      cell.addEventListener('input', (ev)=>{
+        cell.value = cell.value.replace(/[^0-9]/g, '').slice(0,1);
+        if(cell.value.length===1 && i<pinCells.length-1) pinCells[i+1].focus();
+        updateConfirmState();
+      });
+      cell.addEventListener('keydown', (ev)=>{
+        if(ev.key==='Backspace' && !cell.value && i>0){
+          pinCells[i-1].focus();
+        }
+        if(ev.key==='Enter'){ if(i===pinCells.length-1 && !confirmBtn.disabled) confirmBtn.click(); }
+      });
+      cell.addEventListener('paste', (ev)=>{
+        ev.preventDefault();
+        const paste = (ev.clipboardData || window.clipboardData).getData('text') || '';
+        const digits = paste.replace(/\D/g, '').slice(0,4);
+        if(digits.length>0){
+          for(let k=0;k<4;k++){ pinCells[k].value = digits[k] || ''; }
+          updateConfirmState();
+        }
+      });
+    });
+
+    confirmBtn.addEventListener('click', ()=>{
+      const entered = getPinFromModal();
+      if(entered.length<4){ pinError.textContent='Enter 4 digits'; pinError.style.display='block'; return }
+      if(!pendingTx){ pinError.textContent='No pending transaction. Please try again.'; pinError.style.display='block'; return }
+      if(entered !== state.user.pin){ pinError.textContent='Incorrect PIN'; pinError.style.display='block'; return }
+
+      const tx = Object.assign({}, pendingTx);
+      try{
+        state.user.balance = Number((state.user.balance + tx.amount).toFixed(2));
+        state.transactions.push({to:tx.to, amount:tx.amount, type:tx.type, date: Date.now()});
+        saveState(state);
+        render();
+        closePinModal();
+        alert('Payment successful');
+      }catch(err){
+        console.error('Failed to commit transaction', err);
+        pinError.textContent = 'Failed to complete transaction. See console.';
+        pinError.style.display = 'block';
+      }
+    });
+
+    cancelBtn.addEventListener('click', ()=> closePinModal());
+    pinModal.addEventListener('click', (ev)=>{ if(ev.target === pinModal) closePinModal(); });
+
+    const menuButtons = Array.from(document.querySelectorAll('.menu button'));
+    menuButtons.forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const mapping = {dashboard:'dashboard', send:'send', history:'history', settings:'settings'};
+        const v = btn.getAttribute('data-view');
+        btn.dataset.view = v;
+        showView(mapping[v] || 'dashboard');
+      });
+    });
+
+    menuButtons.forEach(b=>{ const v = b.getAttribute('data-view'); if(v) b.dataset.view = v; });
+
+    document.getElementById('topUp').addEventListener('click', ()=>{
+      const amt = parseFloat(prompt('Top up amount (ZAR)', '500'));
+      if(!amt || amt<=0) return; state.user.balance = Number((state.user.balance + amt).toFixed(2));
+      state.transactions.push({to:'Top-up', amount:amt, type:'Top-up', date:Date.now()}); saveState(state); render();
+    });
+
+    document.getElementById('topUp').addEventListener('click', ()=>{
+  const amt = parseFloat(prompt('Top up amount (ZAR)', '500'));
+  if(!amt || amt<=0) return;
+
+  // Update balance
+  state.user.balance = Number((state.user.balance + amt).toFixed(2));
+
+  // Add a transaction for the top-up
+  state.transactions.push({
+    to: 'Top-up',        
+    amount: amt,            
+    type: 'Top-up',         
+    date: Date.now()        
+  });
+
+  saveState(state);
+  render();  // refresh the dashboard & history
+  alert('Top-up successful');
+});
+
+
+    document.getElementById('changePinBtn').addEventListener('click', ()=>{
+      const a = document.getElementById('newPin').value.trim();
+      const b = document.getElementById('confirmPin').value.trim();
+      if(!/^\d{4}$/.test(a)){alert('PIN must be 4 digits');return}
+      if(a!==b){alert('PINs do not match');return}
+      state.user.pin = a; saveState(state); render(); alert('PIN updated');
+      document.getElementById('newPin').value=''; document.getElementById('confirmPin').value='';
+    });
+
+    document.getElementById('resetDemo').addEventListener('click', ()=>{
+      if(!confirm('Reset demo data in this browser?')) return; localStorage.removeItem(STORAGE_KEY); state = loadState(); render(); alert('Demo data reset');
+    });
+
+    document.getElementById('resetForm').addEventListener('click', ()=>{sendForm.reset();});
+
+    render(); showView('dashboard');
+
+    window.__cyphers_state = state;
+  </script>
+</body>
+</html>
