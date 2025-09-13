@@ -17,14 +17,16 @@ public class HomeController {
     }
 
     @PostMapping("/login")
-    public String processLogin(@RequestParam String username,
-                               @RequestParam String password,
+    public String processLogin(@RequestParam String loginUsername,
+                               @RequestParam String loginPassword,
                                Model model) {
-        if (username.equals(validUsername) && password.equals(validPassword)) {
-            return "redirect:/dashboard";
+        if (loginUsername.equals(validUsername) && loginPassword.equals(validPassword)) {
+            model.addAttribute("message", "Login successful!");
+            return "redirect:../static/html/cyphersbank.html";
+
         } else {
             model.addAttribute("error", "Invalid username or password");
-            return "login";
+            return "index.html";
         }
     }
 
