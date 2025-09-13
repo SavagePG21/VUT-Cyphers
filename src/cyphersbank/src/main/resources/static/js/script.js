@@ -196,7 +196,8 @@ confirmBtn.addEventListener('click', ()=>{
 });
 
 cancelBtn.addEventListener('click', ()=> closePinModal());
-pinModal.addEventListener('click', (ev)=>{ if(ev.target === pinModal)});
+pinModal.addEventListener('click', (ev)=>{ if(ev.target === pinModal());
+});
 
 
 
