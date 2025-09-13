@@ -14,43 +14,6 @@ function toggleForms() {
 }
 
 
-document.getElementById("loginBtn").addEventListener("click", function() {
-    const username = document.getElementById("loginUsername").value;
-    const password = document.getElementById("loginPassword").value;
-
-    if(username === "Gift" && password === "1234") {
-        window.location.href = "cyphersbank.html"; // redirect
-    } else {
-        alert("Incorrect username or password");
-    }
-});
-
-
-document.getElementById("signupBtn").addEventListener("click", function() {
-    const fullNames = document.getElementById("signupName").value.trim();
-    const username = document.getElementById("signupUsername").value.trim();
-    const password = document.getElementById("signupPassword").value.trim();
-    const emergencyPin = document.getElementById("signupEmergencyPin").value.trim();
-
-    if (!fullNames || !username || !password || !emergencyPin) {
-        alert("Please fill in all fields");
-        return;
-    }
-
-    if (emergencyPin.length !== 4 || isNaN(emergencyPin)) {
-        alert("Emergency PIN must be 4 digits");
-        return;
-    }
-
-    // For now, just log the values
-    console.log({ fullNames, username, password, emergencyPin });
-    alert("Signup successful (demo)");
-});
-
-
-
-
-
 
 // cyphersbank dashboard
 const STORAGE_KEY = 'cyphers_demo_v1';
