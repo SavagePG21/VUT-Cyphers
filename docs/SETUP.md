@@ -49,4 +49,3 @@ This project combines frontend and backend technologies for a full-stack experie
 
 ---
 
-Let me know if you'd like a README template or want to package this for GitHub deployment. I can also help you add environment profiles or Docker support if you're planning to scale it.
