@@ -1,5 +1,3 @@
-Absolutely, Kagiso! Here's a revised version of your **Project Overview** that integrates the dual-PIN system and emergency SMS feature. It’s written in a clear, professional tone suitable for documentation, presentations, or README files.
-
 ---
 
 ## 🧾 Project Overview
