@@ -12,8 +12,7 @@ Before you begin, make sure you have the following installed:
 - **IntelliJ IDEA (Community or Ultimate Edition)**  
 - **Maven** (comes bundled with IntelliJ)
 - **Spring Boot** with the following dependencies:
-  - `spring-boot-starter-web`  
-  - (Optional) `spring-boot-devtools` for hot reloading during development
+  - spring-boot-starter-web  
 
 ---
 
