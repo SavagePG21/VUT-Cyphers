@@ -1,35 +1,51 @@
-> *This document serves as a template for you to write **setup** instructions for your project.* 
+---
 
-> Depending on the scale/complexity of your project, it may prove beneficial to have a **Python/Batch/Bash** script in the `scripts/` directory which *automatically sets-up* the project.
+## Project Setup Guide: Cyphers Bank Web App
 
-# Setup Instructions
+To run and explore this project, follow the steps below:
 
-Follow the steps below to set up and run the project. (Example)
+###  Prerequisites
+
+Before you begin, make sure you have the following installed:
+
+- **Java JDK (version 17 or higher)**  
+- **IntelliJ IDEA (Community or Ultimate Edition)**  
+- **Maven** (comes bundled with IntelliJ)
+- **Spring Boot** with the following dependencies:
+  - spring-boot-starter-web  
 
 ---
 
-## 📦 Requirements
-``` c
-// TODO: List software, runtimes, frameworks, and or dependencies
-// along with instructions on how to set each up.
-```
-- Example: Node.js v18+
-- Example: Python 3.10
-- Example: Docker
+###  Technologies Used
+
+This project combines frontend and backend technologies for a full-stack experience:
+
+| Layer        | Technology Used            |
+|--------------|-----------------------------|
+| Frontend     | HTML, CSS, JavaScript       |
+| Backend      | Java with Spring Boot       |
+| IDE          | IntelliJ IDEA               |
+| Build Tool   | Maven                       |
 
 ---
 
-## ⚙️ Installation
-``` bash
-# Clone the repository
-git clone <your-repo-url>
-cd <repo-name>
+###  How to Set Up the Project in IntelliJ
 
-# Install dependencies
-<insert command here>
-```
+1. **Open IntelliJ IDEA**
+2. **Create a new Spring Boot project**:
+   - Use the Spring Initializr
+   - Add the dependency: `spring-boot-starter-web`
+3. **Place your HTML, CSS, and JS files** in the `src/main/resources/static` folder
+4. **Create your controller** in `src/main/java/.../controller/HomeController.java`
+5. **Run the application** using the green play button or `mvn spring-boot:run`
 
-## ▶️ Running the Project
-``` bash
-<insert run command here> # Or an explanation on what to do
-```
+---
+
+###  Testing the App
+
+- Navigate to `http://localhost:8080` in your browser
+- Use the hardcoded login credentials (e.g., `admin / 1234`)
+- On successful login, you'll be redirected to the dashboard page
+
+---
+
