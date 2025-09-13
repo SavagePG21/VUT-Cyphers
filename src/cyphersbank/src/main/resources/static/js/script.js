@@ -37,25 +37,5 @@ function toggleForms() {
   }
 }
 
-document.getElementById("loginBtn").addEventListener("click", function() {
-  const username = document.getElementById("loginUsername").value;
-  const password = document.getElementById("loginPassword").value;
 
-  if (username === "admin" && password === "1234") {
-    window.location.href = "../static/html/cyphersbank.html"; // redirect
-  } else {
-    alert("Incorrect username or password");
-  }
-});
-
-document.getElementById("signupBtn").addEventListener("click", function() {
-  const fullNames = document.getElementById("signupName").value.trim();
-  const username = document.getElementById("signupUsername").value.trim();
-  const password = document.getElementById("signupPassword").value.trim();
-  const emergencyPin = document.getElementById("signupEmergencyPin").value.trim();
-
-
-  alert("Signup successful (demo)");
-  window.location.href = "login.html"; 
-});
 
