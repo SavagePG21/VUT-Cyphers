@@ -54,17 +54,8 @@ document.getElementById("signupBtn").addEventListener("click", function() {
   const password = document.getElementById("signupPassword").value.trim();
   const emergencyPin = document.getElementById("signupEmergencyPin").value.trim();
 
-  if (!fullNames || !username || !password || !emergencyPin) {
-    alert("Please fill in all fields");
-    return;
-  }
-
-  if (emergencyPin.length !== 4 || isNaN(emergencyPin)) {
-    alert("Emergency PIN must be 4 digits");
-    return;
-  }
 
   alert("Signup successful (demo)");
-  window.location.href = "login.html"; // back to login
+  window.location.href = "login.html"; 
 });
 
