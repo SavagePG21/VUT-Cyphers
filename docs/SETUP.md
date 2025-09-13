@@ -1,5 +1,3 @@
----
-
 ## Project Setup Guide: Cyphers Bank Web App
 
 To run and explore this project, follow the steps below:
