@@ -3,88 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <title>Cyphers Bank - Demo</title>
+  <link rel="stylesheet" href="style/style.css">
 </head>
-<body style="margin:0; font-family:Arial, sans-serif; background:linear-gradient(135deg,#0d1b2a,#1b263b); color:#fff; height:100vh; display:flex; justify-content:center; align-items:center;">
+<body>
+  <div id="landingPage" class="landing-page">
+    <h1>Cyphers Bank</h1>
 
-<div id="landingPage" style="background:#1e2d3d; padding:30px; border-radius:12px; width:350px; text-align:center; box-shadow:0px 0px 15px rgba(0,0,0,0.4);">
-  <h1 style="margin-bottom:20px; color:#f9d342;">Cyphers Bank</h1>
+    <!-- Login Form -->
+    <div id="loginForm" class="form-container">
+      <h2>Login</h2>
+      <form id="loginFormElement" action="#" method="post">
+        <input id="loginUsername" type="text" placeholder="Username" required>
+        <input id="loginPassword" type="password" placeholder="Password" required>
+        <button id="loginBtn" type="button">Login</button>
+        <p>Don’t have an account? 
+          <a href="#" onclick="toggleForms()">Sign up</a>
+        </p>
+      </form>
+    </div>
 
-  <!-- Login Form -->
-  <div id="loginForm" style="display:block;">
-    <h2 style="margin-bottom:15px;">Login</h2>
-    <form id="loginFormElement" action="login" method="post">
-    <input id="loginUsername" type="text" placeholder="Username" style="width:90%; padding:10px; margin:8px 0; border:none; border-radius:6px;">
-    <input id="loginPassword" type="password" placeholder="Password" style="width:90%; padding:10px; margin:8px 0; border:none; border-radius:6px;">
-    <button id="loginBtn" style="background:#f9d342; color:#000; padding:10px 20px; border:none; border-radius:6px; margin-top:10px; cursor:pointer;" onclick= >Login</button>
-    <p style="margin-top:15px; font-size:14px;">Don’t have an account? <a href="#" style="color:#f9d342;" onclick="toggleForms()">Sign up</a></p>
-    </form>
+    <!-- Signup Form -->
+    <div id="signupForm" class="form-container" style="display:none;">
+      <h2>Sign Up</h2>
+      <form id="signupFormElement" action="#" method="post">
+        <input id="signupName" type="text" placeholder="Full Name" required>
+        <input id="signupUsername" type="text" placeholder="Username" required>
+        <input id="signupPassword" type="password" placeholder="Password" required>
+        <input id="signupEmergencyPin" type="password" placeholder="Emergency Pin" required>
+        <button id="signupBtn" type="button">Sign Up</button>
+        <p>Already have an account? 
+          <a href="#" onclick="toggleForms()">Login</a>
+        </p>
+      </form>
+    </div>
   </div>
 
-  <!-- Signup Form -->
-  <div id="signupForm" style="display:none;">
-    <h2 style="margin-bottom:15px;">Sign Up</h2>
-    <form id="signupFormElement" action="dashboard" method="post" >
-    <input id="signupName" type="text" placeholder="Full Name" style="width:90%; padding:10px; margin:8px 0; border:none; border-radius:6px;">
-    <input id="signupUsername" type="text" placeholder="Username" style="width:90%; padding:10px; margin:8px 0; border:none; border-radius:6px;">
-    <input id="signupPassword" type="password" placeholder="Password" style="width:90%; padding:10px; margin:8px 0; border:none; border-radius:6px;">
-    <input id="signupEmergencyPin" type="password" placeholder="Emergency Pin" style="width:90%; padding:10px; margin:8px 0; border:none; border-radius:6px;">
-    <button id="signupBtn" style="background:#f9d342; color:#000; padding:10px 20px; border:none; border-radius:6px; margin-top:10px; cursor:pointer;">Sign Up</button>
-    <p style="margin-top:15px; font-size:14px;">Already have an account? <a href="#" style="color:#f9d342;" onclick="toggleForms()">Login</a></p>
-    </form>form></form>
-  </div>
-</div>
-
-
-
-<script>
-  function toggleForms() {
-    const login = document.getElementById("loginForm");
-    const signup = document.getElementById("signupForm");
-    if (login.style.display === "block") {
-      login.style.display = "none";
-      signup.style.display = "block";
-    } else {
-      login.style.display = "block";
-      signup.style.display = "none";
-    }
-  }
-
-  document.getElementById("loginBtn").addEventListener("click", function() {
-    const username = document.getElementById("loginUsername").value;
-    const password = document.getElementById("loginPassword").value;
-
-    if(username === "admin" && password === "1234") {
-      window.location.href = "../static/html/cyphersbank.html"; // redirect
-    } else {
-      alert("Incorrect username or password");
-    }
-  });
-
-
-
-
-  document.getElementById("signupBtn").addEventListener("click", function() {
-    const fullNames = document.getElementById("signupName").value.trim();
-    const username = document.getElementById("signupUsername").value.trim();
-    const password = document.getElementById("signupPassword").value.trim();
-    const emergencyPin = document.getElementById("signupEmergencyPin").value.trim();
-
-    if (!fullNames || !username || !password || !emergencyPin) {
-      alert("Please fill in all fields");
-      return;
-    }
-
-    if (emergencyPin.length !== 4 || isNaN(emergencyPin)) {
-      alert("Emergency PIN must be 4 digits");
-      return;
-    }
-
-
-    window.location.href = "login.html";
-    alert("Signup successful (demo)");
-  });
-
-
-</script>
+  <script src="js/script.js"></script>
 </body>
 </html>
