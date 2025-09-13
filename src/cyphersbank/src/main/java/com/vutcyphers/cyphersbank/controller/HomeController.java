@@ -1,6 +1,4 @@
-package com.vutcyphers.cyphersbank;
-
-package com.cyphersbank.controller;
+package com.vutcyphers.cyphersbank.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +13,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String showLoginForm() {
-        return "login"; // Renders login.html
+        return "index.html"; //
     }
 
     @PostMapping("/login")
@@ -32,6 +30,6 @@ public class HomeController {
 
     @GetMapping("/dashboard")
     public String showDashboard() {
-        return "dashboard"; // Renders dashboard.html
+        return "cyphersbank.html";
     }
 }
