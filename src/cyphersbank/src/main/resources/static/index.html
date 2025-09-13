@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Cyphers Bank - Demo</title>
   <link rel="stylesheet" href="style/style.css">
+
 </head>
 <body>
   <div id="landingPage" class="landing-page">
@@ -12,12 +13,11 @@
     <!-- Login Form -->
     <div id="loginForm" class="form-container">
       <h2>Login</h2>
-      <form id="loginFormElement" action="#" method="post">
+      <form id="loginFormElement" action="/login" method="post">
         <input id="loginUsername" type="text" placeholder="Username" required>
         <input id="loginPassword" type="password" placeholder="Password" required>
         <button id="loginBtn" type="button">Login</button>
-        <p>Don’t have an account? 
-          <a href="#" onclick="toggleForms()">Sign up</a>
+        <p>Don’t have an account?<a href="#" onclick="toggleForms()">Sign up</a>
         </p>
       </form>
     </div>
@@ -31,13 +31,13 @@
         <input id="signupPassword" type="password" placeholder="Password" required>
         <input id="signupEmergencyPin" type="password" placeholder="Emergency Pin" required>
         <button id="signupBtn" type="button">Sign Up</button>
-        <p>Already have an account? 
+        <p>Already have an account?
           <a href="#" onclick="toggleForms()">Login</a>
         </p>
       </form>
     </div>
   </div>
 
-  <script src="js/script.js"></script>
+  <script src="../static/js/script.js"></script>
 </body>
 </html>

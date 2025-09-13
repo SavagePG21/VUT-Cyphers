@@ -22,7 +22,7 @@ public class HomeController {
                                Model model) {
         if (loginUsername.equals(validUsername) && loginPassword.equals(validPassword)) {
             model.addAttribute("message", "Login successful!");
-            return "redirect:../static/html/cyphersbank.html";
+            return "HeySibuu";
 
         } else {
             model.addAttribute("error", "Invalid username or password");
