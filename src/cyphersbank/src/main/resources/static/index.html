@@ -16,7 +16,7 @@
         <input id="loginUsername" type="text" placeholder="Username" required>
         <input id="loginPassword" type="password" placeholder="Password" required>
         <button id="loginBtn" type="button">Login</button>
-        <p>Don’t have an account? 
+        <p>Don’t have an account?
           <a href="#" onclick="toggleForms()">Sign up</a>
         </p>
       </form>
@@ -31,13 +31,61 @@
         <input id="signupPassword" type="password" placeholder="Password" required>
         <input id="signupEmergencyPin" type="password" placeholder="Emergency Pin" required>
         <button id="signupBtn" type="button">Sign Up</button>
-        <p>Already have an account? 
+        <p>Already have an account?
           <a href="#" onclick="toggleForms()">Login</a>
         </p>
       </form>
     </div>
   </div>
 
-  <script src="js/script.js"></script>
+  <script >
+    function toggleForms() {
+  const login = document.getElementById("loginForm");
+  const signup = document.getElementById("signupForm");
+  if (login.style.display === "block") {
+    login.style.display = "none";
+    signup.style.display = "block";
+  } else {
+    login.style.display = "block";
+    signup.style.display = "none";
+  }
+}
+
+document.getElementById("loginBtn").addEventListener("click", function() {
+  const username = document.getElementById("loginUsername").value;
+  const password = document.getElementById("loginPassword").value;
+
+  if (username === "admin" && password === "1234") {
+    window.location.href = "cyphersbank.html"; // redirect
+  } else {
+    alert("Incorrect username or password");
+  }
+});
+
+document.getElementById("signupBtn").addEventListener("click", function() {
+  const fullNames = document.getElementById("signupName").value.trim();
+  const username = document.getElementById("signupUsername").value.trim();
+  const password = document.getElementById("signupPassword").value.trim();
+  const emergencyPin = document.getElementById("signupEmergencyPin").value.trim();
+
+  if (!fullNames || !username || !password || !emergencyPin) {
+    alert("Please fill in all fields");
+    return;
+  }
+
+  if (emergencyPin.length !== 4 || isNaN(emergencyPin)) {
+    alert("Emergency PIN must be 4 digits");
+    return;
+  }
+
+  alert("Signup successful ");
+  toggleForms(); // switch back to login after signup
+});
+
+
+
+
+
+  </script>
 </body>
 </html>
